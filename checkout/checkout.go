@@ -1,5 +1,7 @@
 package checkout
 
+import "checkout-challange/catalogue"
+
 // Checkout processes items scanned and
 // returns the total of all items
 type Checkout interface {
@@ -8,14 +10,16 @@ type Checkout interface {
 }
 
 type checkout struct {
-	items map[string]int
+	catalogue catalogue.Catalogue
+	items     map[string]int
 }
 
 // NewCheckout is a constructor for the
 // default implementation of Checkout
-func NewCheckout() Checkout {
+func NewCheckout(cat catalogue.Catalogue) Checkout {
 	return &checkout{
-		items: make(map[string]int),
+		catalogue: cat,
+		items:     make(map[string]int),
 	}
 }
 
