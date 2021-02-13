@@ -48,10 +48,21 @@ func (c *checkout) Total() int {
 	for SKU, quantity := range c.items {
 		stock, ok := c.catalogue.Stock()[SKU]
 		if !ok {
-			return 0
+			continue
+		}
+
+		if stock.SpecialQuantity != 0 && quantity >= stock.SpecialQuantity { //Special offer applicable
+			additional := 0 //any additional items not included in offer
+			if quantity%stock.SpecialQuantity != 0 {
+				additional = quantity % stock.SpecialQuantity * stock.UnitPrice
+			}
+
+			grandTotal += ((quantity / stock.SpecialQuantity) * stock.SpecialPrice) + additional
+			continue
 		}
 
 		grandTotal += (stock.UnitPrice * quantity)
 	}
+
 	return grandTotal
 }
