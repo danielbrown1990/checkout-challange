@@ -8,7 +8,7 @@ import (
 
 func Test_SingleItems(t *testing.T) {
 	//Arrange
-	cat := catalogue.NewCatalogue()
+	cat := catalogue.NewTestCatalogue()
 	tests := []struct {
 		SKU  string
 		want int
@@ -38,7 +38,7 @@ func Test_SingleItems(t *testing.T) {
 
 func Test_MultipleItems(t *testing.T) {
 	//Arrange
-	cat := catalogue.NewCatalogue()
+	cat := catalogue.NewTestCatalogue()
 	tests := []struct {
 		SKUs []string
 		want int
@@ -70,7 +70,7 @@ func Test_MultipleItems(t *testing.T) {
 
 func Test_ScanUnknownSKU_ReturnsError(t *testing.T) {
 	//Arrange
-	cat := catalogue.NewCatalogue()
+	cat := catalogue.NewTestCatalogue()
 	sut := checkout.NewCheckout(cat)
 
 	//Act
