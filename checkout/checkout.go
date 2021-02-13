@@ -1,11 +1,14 @@
 package checkout
 
-import "checkout-challange/catalogue"
+import (
+	"checkout-challange/catalogue"
+	"fmt"
+)
 
 // Checkout processes items scanned and
 // returns the total of all items
 type Checkout interface {
-	Scan(SKU string)
+	Scan(SKU string) error
 	Total() int
 }
 
@@ -23,15 +26,21 @@ func NewCheckout(cat catalogue.Catalogue) Checkout {
 	}
 }
 
-func (c *checkout) Scan(SKU string) {
+func (c *checkout) Scan(SKU string) error {
+	_, ok := c.catalogue.Stock()[SKU]
+	if !ok {
+		return fmt.Errorf("no stock found for SKU: %v", SKU)
+	}
+
 	count, ok := c.items[SKU]
 	if !ok {
 		c.items[SKU] = 1
-		return
+		return nil
 	}
 
 	count++
 	c.items[SKU] = count
+	return nil
 }
 
 func (c *checkout) Total() int {
