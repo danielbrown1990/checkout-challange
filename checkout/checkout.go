@@ -32,17 +32,26 @@ func (c *checkout) Scan(SKU string) error {
 		return fmt.Errorf("no stock found for SKU: %v", SKU)
 	}
 
-	count, ok := c.items[SKU]
+	quantity, ok := c.items[SKU]
 	if !ok {
 		c.items[SKU] = 1
 		return nil
 	}
 
-	count++
-	c.items[SKU] = count
+	quantity++
+	c.items[SKU] = quantity
 	return nil
 }
 
 func (c *checkout) Total() int {
-	return 0
+	grandTotal := 0
+	for SKU, quantity := range c.items {
+		stock, ok := c.catalogue.Stock()[SKU]
+		if !ok {
+			return 0
+		}
+
+		grandTotal += (stock.UnitPrice * quantity)
+	}
+	return grandTotal
 }
