@@ -50,19 +50,7 @@ func (c *checkout) Total() int {
 		if !ok {
 			continue
 		}
-
-		if stock.SpecialQuantity != 0 && quantity >= stock.SpecialQuantity { //Special offer applicable
-			additional := 0 //any additional items not included in offer
-			if quantity%stock.SpecialQuantity != 0 {
-				additional = quantity % stock.SpecialQuantity * stock.UnitPrice
-			}
-
-			grandTotal += ((quantity / stock.SpecialQuantity) * stock.SpecialPrice) + additional
-			continue
-		}
-
-		grandTotal += (stock.UnitPrice * quantity)
+		grandTotal += stock.GetPrice(quantity)
 	}
-
 	return grandTotal
 }
