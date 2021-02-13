@@ -1,44 +1,41 @@
 package catalogue
 
+import (
+	"encoding/json"
+	"io/ioutil"
+)
+
 // Catalogue haolds all of the items available
 // represented as Stock structures
 type Catalogue interface {
 	Stock() map[string]Stock
 }
 
-type catalogue struct{}
+type catalogue struct {
+	stock map[string]Stock
+}
 
 // NewCatalogue returns the default implementation
 // for the Catalogue interface
-func NewCatalogue() Catalogue {
-	return &catalogue{}
+func NewCatalogue(catalogLocation string) (Catalogue, error) {
+	data, err := ioutil.ReadFile(catalogLocation) // Could be modified here to fetch from http endpoint
+	if err != nil {
+		return nil, err
+	}
+
+	var stock map[string]Stock
+	err = json.Unmarshal(data, &stock)
+	if err != nil {
+		return nil, err
+	}
+
+	c := &catalogue{
+		stock: stock,
+	}
+
+	return c, nil
 }
 
 func (c *catalogue) Stock() map[string]Stock {
-	return map[string]Stock{
-		"A": Stock{
-			SKU:             "A",
-			Name:            "Apples",
-			SpecialPrice:    130,
-			SpecialQuantity: 3,
-			UnitPrice:       50,
-		},
-		"B": Stock{
-			SKU:             "B",
-			Name:            "Bananas",
-			SpecialPrice:    45,
-			SpecialQuantity: 2,
-			UnitPrice:       30,
-		},
-		"C": Stock{
-			SKU:       "C",
-			Name:      "Cherries",
-			UnitPrice: 20,
-		},
-		"D": Stock{
-			SKU:       "D",
-			Name:      "Dates",
-			UnitPrice: 15,
-		},
-	}
+	return c.stock
 }
