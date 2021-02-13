@@ -47,6 +47,7 @@ func Test_MultipleItems(t *testing.T) {
 		{[]string{"A", "A", "A"}, 130},
 		{[]string{"B", "B"}, 45},
 		{[]string{"A", "B", "C", "A", "B", "D", "A"}, 210},
+		{[]string{"A", "A", "A", "A"}, 180},
 	}
 
 	for _, test := range tests {
