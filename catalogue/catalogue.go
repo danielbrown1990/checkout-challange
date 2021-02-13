@@ -3,7 +3,7 @@ package catalogue
 // Catalogue haolds all of the items available
 // represented as Stock structures
 type Catalogue interface {
-	Stock() []Stock
+	Stock() map[string]Stock
 }
 
 type catalogue struct{}
@@ -14,28 +14,28 @@ func NewCatalogue() Catalogue {
 	return &catalogue{}
 }
 
-func (c *catalogue) Stock() []Stock {
-	return []Stock{
-		Stock{
+func (c *catalogue) Stock() map[string]Stock {
+	return map[string]Stock{
+		"A": Stock{
 			SKU:             "A",
 			Name:            "Apples",
 			SpecialPrice:    130,
 			SpecialQuantity: 3,
 			UnitPrice:       50,
 		},
-		Stock{
+		"B": Stock{
 			SKU:             "B",
 			Name:            "Bananas",
 			SpecialPrice:    45,
 			SpecialQuantity: 2,
 			UnitPrice:       30,
 		},
-		Stock{
+		"C": Stock{
 			SKU:       "C",
 			Name:      "Cherries",
 			UnitPrice: 20,
 		},
-		Stock{
+		"D": Stock{
 			SKU:       "D",
 			Name:      "Dates",
 			UnitPrice: 15,
