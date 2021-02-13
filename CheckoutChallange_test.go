@@ -22,7 +22,11 @@ func Test_SingleItems(t *testing.T) {
 	for _, test := range tests {
 		//Act
 		sut := checkout.NewCheckout(cat)
-		sut.Scan(test.SKU)
+		err := sut.Scan(test.SKU)
+		if err != nil {
+			t.Fatalf("failed to scan item: %v", err)
+		}
+
 		got := sut.Total()
 
 		//Assert
@@ -46,7 +50,10 @@ func Test_MultipleItems(t *testing.T) {
 		//Act
 		sut := checkout.NewCheckout(cat)
 		for _, SKU := range test.SKUs {
-			sut.Scan(SKU)
+			err := sut.Scan(SKU)
+			if err != nil {
+				t.Fatalf("failed to scan item: %v", err)
+			}
 		}
 
 		got := sut.Total()
@@ -55,5 +62,19 @@ func Test_MultipleItems(t *testing.T) {
 		if test.want != got {
 			t.Fatalf("incorrect total want(%v) have (%v)", test.want, got)
 		}
+	}
+}
+
+func Test_ScanUnknownSKU_ReturnsError(t *testing.T) {
+	//Arrange
+	cat := catalogue.NewCatalogue()
+	sut := checkout.NewCheckout(cat)
+
+	//Act
+	err := sut.Scan("X")
+
+	//Assert
+	if err == nil {
+		t.Fatal("no error returned for scan")
 	}
 }
