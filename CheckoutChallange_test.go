@@ -1,12 +1,14 @@
 package main
 
 import (
+	"checkout-challange/catalogue"
 	"checkout-challange/checkout"
 	"testing"
 )
 
 func Test_SingleItems(t *testing.T) {
 	//Arrange
+	cat := catalogue.NewCatalogue()
 	tests := []struct {
 		SKU  string
 		want int
@@ -19,7 +21,7 @@ func Test_SingleItems(t *testing.T) {
 
 	for _, test := range tests {
 		//Act
-		sut := checkout.NewCheckout()
+		sut := checkout.NewCheckout(cat)
 		sut.Scan(test.SKU)
 		got := sut.Total()
 
@@ -32,6 +34,7 @@ func Test_SingleItems(t *testing.T) {
 
 func Test_MultipleItems(t *testing.T) {
 	//Arrange
+	cat := catalogue.NewCatalogue()
 	tests := []struct {
 		SKUs []string
 		want int
@@ -41,7 +44,7 @@ func Test_MultipleItems(t *testing.T) {
 
 	for _, test := range tests {
 		//Act
-		sut := checkout.NewCheckout()
+		sut := checkout.NewCheckout(cat)
 		for _, SKU := range test.SKUs {
 			sut.Scan(SKU)
 		}
